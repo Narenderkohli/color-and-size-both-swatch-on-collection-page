@@ -1,0 +1,1 @@
+# color-and-size-both-swatch-on-collection-page
