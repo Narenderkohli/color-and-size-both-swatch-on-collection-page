@@ -1,0 +1,270 @@
+---------------------------------------------
+Html
+------------------------------------------
+
+<variant-radios class="no-js-hiddenn" data-section="{{ section.id }}" data-url="{{  }}" {{ block.shopify_attributes }}>
+  <fieldset class="js product-form__input">
+    {% assign keys = 'Color,color,Colour,colour' | split: ',' %}
+    {% for key in keys %}
+      {% if card_product.options contains key %}
+        <div class="product_tile_color_holder in_lab">
+          {% for color_option in card_product.options_by_name[key].values %}
+            {% for variant in card_product.variants %}
+              {% if variant.options contains color_option %}
+                {% if variant.image %}
+                  {% assign background_style = color_option %}
+                {% endif %}
+                {% if variant.metafields.color.swatch %}
+                  {% assign background_style = variant.metafields.color.swatch %}
+                {% endif %}
+                {% if variant.metafields.image.swatch %}
+                  {% assign background_style = 'url(' | append: variant.metafields.image.swatch | append: ')' %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            <div class="custom-swatch-Color cstm-radio">
+              <input
+                type="radio"
+                {% for variant in card_product.variants %}
+                  {% if variant.options contains color_option %}
+                    {% if variant.image %}
+                      variantid="{{ variant.id }}"
+                      var_name="{{color_option}}"
+                      data-img="{{ variant.image.src | img_url: 'master' }}"
+                    {% endif %}
+                  {% endif -%}
+                {% endfor %}
+                name="{{ card_product.id }}_card_color"
+                id="{{ card_product.id }}color{{ forloop.index }}"
+              >
+              <span
+                id="hover_new"
+                var="{{ color_option | handle }}"
+                class="{{  color_option | handle }}"
+                {% for variant in card_product.variants %}
+                  {% if variant.options contains color_option %}
+                    {% if variant.image %}
+                      variantid="{{ variant.id }}"
+                      data_url="{{ variant.url }}"
+                      data-img="{{ variant.image.src | img_url: 'master' }}"
+                      style="
+                        background-size: contain; background-size: cover;
+                        background-position: center; background-color: {{ color_option | split: ' ' | last | handle  }}!important; background-image: url('{{ variant.image | img_url }}');
+                      "
+                    {% endif %}
+                  {% endif -%}
+                {% endfor %}
+                style="
+                    background-size: cover;
+                     background-position: center;
+                    background-repeat: no-repeat; background-color: {{ color_option | split: ' ' | last | handle  }}!important;
+                  background-size: cover;
+                "
+              >
+              </span
+              ><label>
+                <span class="custom-swatch-Color value_box"> {{ color_option }}</span></label
+              >
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </fieldset>
+</variant-radios>
+
+<!-- Size varinat code -->
+
+<variant-radios
+  class="no-js-hiddenn-size"
+  data-section="{{ section.id }}"
+  data-url="{{  }}"
+  {{ block.shopify_attributes }}
+>
+  <select name="cars" id="cars" style="display:none">
+    {% for variant in card_product.variants %}
+      <option var_all_id="{{ variant.id }}" var_title="{{variant.title}}"></option>
+    {% endfor %}
+  </select>
+  <fieldset class="js product-form__input-size">
+    {% assign keys = 'Size,size' | split: ',' %}
+    {% for key in keys %}
+      {% if card_product.options contains key %}
+        <div class="product_tile_color_holder in_lab-size">
+          {% for size_option in card_product.options_by_name[key].values %}
+            <div class="custom-swatch-Color cstm-radio-size">
+              <span
+                {% for variant in card_product.variants %}
+                  {% if variant.options contains size_option %}
+                    variantid="{{ variant.id }}"
+                    var_size_name="{{ size_option }}"
+                    data-img="{{ variant.image.src | img_url: 'master' }}"
+                  {% endif -%}
+                {% endfor %}
+                name="{{ card_product.id }}_card_color"
+                id="{{ card_product.id }}color{{ forloop.index }}"
+              >
+                {{- size_option -}}
+              </span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </fieldset>
+</variant-radios>
+
+<style>
+                  span.value_box {
+                    display: none;
+                }
+                  .custom-swatch-Color:hover label span.value_box {
+                    display: block !important;
+                  }
+                .custom-swatch-Color label span.value_box {
+                    display: none !important;
+                    position: absolute !important;
+                    top: -30px !important;
+                    left: 0 !important;
+                    background: #3175BF !important;
+                    padding: 5px !important;
+                    color: #973535 !important;
+                }
+                span.value_box:before {
+                    content: '';
+                    position: absolute;
+                    display: block;
+                    width: 0px;
+                    left: 10px;
+                    right:auto;
+                    bottom: 0;
+                    border: 6px solid transparent;
+                    border-bottom: 0;
+                    border-top: 5px solid #3175BF;
+                    transform: translate(0, calc(0px + 5px));
+                }
+
+                  .custom-swatch-Color label span.value_box {
+                    display: none !important;
+                    position: absolute !important;
+                    top: -30px !important;
+                    left: 0 !important;
+                /*     background: #3175bf00 !important; */
+                    padding: 12px !important;
+                    color: #973535 !important;
+                    padding: 0 !important;
+                    border-radius: 0;
+                    min-width: 60px;
+                    font-size: 12px;
+                    text-align: center;
+                    color: #fff !important;
+                }
+              fieldset.js.product-form__input {
+                  border: none;
+              }
+          .product_tile_color_holder.in_lab-size {
+              display: flex;
+          }
+        .custom-swatch-Color.cstm-radio-size {
+            padding-left: 6px;
+        }
+      fieldset.js.product-form__input-size {
+          border: none;
+      }
+
+      .product_tile_color_holder{
+     display: flex;
+    align-items: center;
+    }
+      .custom-swatch-Color.cstm-radio-size span {
+        border: 1px solid #000;
+        padding: 2px 8px;
+        margin-right: 5px;
+    }
+    .custom-swatch-Color.cstm-radio input {
+        width: 24px;
+        height: 30px;
+    }
+  .custom-swatch-Color {
+      POSITION: RELATIVE;
+      DISPLAY: FLEX;
+      gap:10PX;
+  }
+  .cstm-radio input[type="radio"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100% !important;
+      width: 100% !important;
+      margin: 0;
+      cursor: pointer;
+      z-index: 99;
+      opacity: 0;
+  }
+  .product_tile_color_holder.in_lab input[type='radio']:after {
+      width: 25px;
+      height: 25px;
+      border-radius: 15px;
+      top: 2px;
+      left: 0px;
+      position: relative;
+      background-color: #fff;
+      content: '';
+      display: inline-block;
+      visibility: visible;
+      border: 2px solid #ccc;
+  }
+  .cstm-radio span {
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      border: 1px solid #000;
+  }
+</style>
+------------------------------------------------
+End Html And Css
+----------------------------------
+
+--------------------------------------------------
+Js
+-----------------------------------
+
+var colo_var_id = '';
+$(".product_tile_color_holder input").click(function(event) {
+    colo_var_id = $(this).attr('var_name');
+    var variant_img = $(this).attr('data-img');
+    $(this).parents('li').find('.card__media img').attr('src', 'variant_img');
+    $(this).parents('li').find('.card__media img').attr('srcset', variant_img);
+    var vari = $(this).attr('variantid');
+});
+$(document).on('click', '.custom-swatch-Color span', function() {
+    var combine_var = '/';
+    // alert(combine_var);
+    var var_name = $(this).attr('var_size_name');
+    var var_id = $(this).attr('variantid');
+    var all_com_val = colo_var_id + " " + combine_var + " " + var_name;
+    console.log(all_com_val);
+    var_id_both = var_id;
+    $('#cars option').each(function() {
+        var var_val_each = $(this).attr('var_title');
+        if (all_com_val == var_val_each) {
+            var_id_both = $(this).attr('var_all_id');
+            console.log('matched val');
+        } else {
+            console.log('not match val');
+        }
+    });
+    console.log(var_id);
+    $.ajax({
+        type: 'POST',
+        url: '/cart/add.js',
+        dataType: 'json',
+        data: {
+            quantity: 1,
+            id: var_id_both
+        },
+        success: function() {
+            console.log("Added successfully");
+        },
+    });
+});
